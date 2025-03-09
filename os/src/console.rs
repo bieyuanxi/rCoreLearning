@@ -7,7 +7,7 @@ struct Stdout;
 
 impl Write for Stdout {
     fn write_str(&mut self, s: &str) -> core::fmt::Result {
-        for c in s.chars() {
+        for c in s.bytes() {
             console_putchar(c as usize);
         }
         Ok(())
@@ -36,20 +36,20 @@ macro_rules! println {
 #[macro_export]
 macro_rules! error {
     ($fmt: literal $(, $($arg:tt)+)?)=> {
-        $crate::console::print(format_args!(concat!("\x1b[31m", $fmt, "\x1b[0m\n") $(, $($arg)+)?));
+        $crate::console::print(format_args!(concat!("\x1b[31m", "[ERROR] ", $fmt, "\x1b[0m\n") $(, $($arg)+)?));
     }
 }
 
 #[macro_export]
 macro_rules! info {
     ($fmt: literal $(, $($arg:tt)+)?)=> {
-        $crate::console::print(format_args!(concat!("\x1b[34m", $fmt, "\x1b[0m\n") $(, $($arg)+)?));
+        $crate::console::print(format_args!(concat!("\x1b[34m", "[INFO] ", $fmt, "\x1b[0m\n") $(, $($arg)+)?));
     }
 }
 
 #[macro_export]
 macro_rules! debug {
     ($fmt: literal $(, $($arg:tt)+)?)=> {
-        $crate::console::print(format_args!(concat!("\x1b[32m", $fmt, "\x1b[0m\n") $(, $($arg)+)?));
+        $crate::console::print(format_args!(concat!("\x1b[32m", "[DEBUG] ", $fmt, "\x1b[0m\n") $(, $($arg)+)?));
     }
 }

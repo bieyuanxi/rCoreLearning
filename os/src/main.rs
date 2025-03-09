@@ -30,6 +30,7 @@ pub fn rust_main() -> ! {
     info!(".rodata [{:#x}, {:#x})", srodata as usize, erodata as usize);
     info!(".data [{:#x}, {:#x})", sdata as usize, edata as usize);
     info!(".bss [{:#x}, {:#x})", sbss as usize, ebss as usize);
+    info!("is able to show Chinese: 中文♥️");
     panic!("Shutdown machine!");
     
 }
