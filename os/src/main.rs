@@ -3,11 +3,16 @@
 
 mod lang_items;
 mod sbi;
+#[macro_use]
 mod console;
+mod batch;
+mod trap;
+mod syscall;
 
 use core::arch::global_asm;
 
 global_asm!(include_str!("entry.asm"));
+global_asm!(include_str!("link_app.S"));
 
 #[unsafe(no_mangle)]
 pub fn rust_main() -> ! {
@@ -31,7 +36,11 @@ pub fn rust_main() -> ! {
     info!(".data [{:#x}, {:#x})", sdata as usize, edata as usize);
     info!(".bss [{:#x}, {:#x})", sbss as usize, ebss as usize);
     info!("is able to show Chinese: 中文♥️");
-    panic!("Shutdown machine!");
+    
+    trap::init();
+    batch::init();
+    batch::run_next_app();
+    // panic!("Shutdown machine!");
     
 }
 
