@@ -5,11 +5,14 @@ mod lang_items;
 mod sbi;
 #[macro_use]
 mod console;
+mod logging;
 mod batch;
 mod trap;
 mod syscall;
 
 use core::arch::global_asm;
+
+use log::*;
 
 global_asm!(include_str!("entry.asm"));
 global_asm!(include_str!("link_app.S"));
@@ -27,6 +30,11 @@ pub fn rust_main() -> ! {
         fn ebss();
     }
     clear_bss();
+
+    logging::init();
+
+    warn!("");
+
     println!("Hello world!");
     error!("this is an error!");
     info!("this is an info! info: {}", "msg");
@@ -35,7 +43,7 @@ pub fn rust_main() -> ! {
     info!(".rodata [{:#x}, {:#x})", srodata as usize, erodata as usize);
     info!(".data [{:#x}, {:#x})", sdata as usize, edata as usize);
     info!(".bss [{:#x}, {:#x})", sbss as usize, ebss as usize);
-    info!("is able to show Chinese: 中文♥️");
+    trace!("is able to show Chinese: 中文♥️");
     
     trap::init();
     batch::init();
